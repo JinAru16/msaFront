@@ -1,7 +1,6 @@
 
-import Body from "@/pages/main/Main";
-import Footer from "@/pages/main/Footer";
-import Header from "@/pages/main/Header";
+import Body from "@/components/main/Main";
+
 
 
 export default function Home() {

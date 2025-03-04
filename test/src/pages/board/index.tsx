@@ -1,14 +1,27 @@
 import Link from "next/link";
+import {useEffect, useState} from "react";
 
-const dummyPosts = [
-    { id: 1, title: "첫 번째 글", views: 1, recommended: 0 },
-    { id: 2, title: "두 번째 글" , views: 0, recommended: 1},
-    { id: 3, title: "teset122" , views: 3, recommended: 0},
-    { id: 4, title: "board 33" , views: 10, recommended: 10},
-    { id: 5, title: "qqqwer1234" , views: 22, recommended: 0}
-];
+interface Post {
+    id: number;
+    title: string;
+    username: string;
+    updateTime: string;
+}
 
 export default function BoardList() {
+
+    const [posts, setPosts] = useState<Post[]>([]);
+    useEffect(() => {
+
+
+        fetch(`http://localhost:8090/api/community`, {
+            method:"GET",
+            credentials:"include"
+        })
+            .then((res) => res.json())
+            .then((data) => setPosts(data));
+    }, []);
+console.log("posts : ", posts);
     return (
         <div className="text-center">
             <h1>게시판 목록</h1>
@@ -25,14 +38,14 @@ export default function BoardList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {dummyPosts.map((post) => (
+                    {posts.map((post) => (
                         <tr key={post.id} className="text-center hover:bg-gray-50">
                             <td className="border p-2">{post.id}</td>
                             <td className="border p-2">
                                 <a href={`/board/${post.id}`} className="text-blue-500 hover:underline">{ post.title }</a>
                             </td>
-                            <td className="border p-2">{post.views}</td>
-                            <td className="border p-2">{post.recommended}</td>
+                            <td className="border p-2">{post.id}</td>
+                            <td className="border p-2">{post.title}</td>
                         </tr>
 
                     ))}

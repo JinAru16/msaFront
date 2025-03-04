@@ -1,4 +1,5 @@
 import { FiMenu, FiX } from "react-icons/fi";
+import Link from "next/link";
 
 // @ts-ignore
 export default function Sidebar({ isOpen, setIsOpen }) {
@@ -20,10 +21,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                     <div>
                         <h2 className="text-xl font-bold mt-5 ml-15">메뉴</h2>
                         <ul className="mt-4 space-y-2">
-                            <li><a href="/" className="block p-2 hover:bg-gray-700">🏠 홈</a></li>
-                            <li><a href="/menu/About" className="block p-2 hover:bg-gray-700">ℹ️ 소개</a></li>
-
-                            <li><a href="#" className="block p-2 hover:bg-gray-700">📄 문서</a></li>
+                            <li><Link href="/" className="block p-2 hover:bg-gray-700">🏠 홈</Link></li>
+                            <li><Link href="/auth/signin" className="block p-2 hover:bg-gray-700">🔐 로그인</Link></li>
+                            <li><Link href="/menu/About" className="block p-2 hover:bg-gray-700">ℹ️ 소개</Link></li>
+                            <li><Link href="/board" className="block p-2 hover:bg-gray-700">📋 자유게시판</Link></li>
                         </ul>
                     </div>
                 )}

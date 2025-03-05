@@ -1,17 +1,23 @@
 
-import { useState } from "react";
+import {FormEvent, useState} from "react";
 import { useRouter } from "next/router"
-// @ts-ignore
-export default function signIn() {
+import secureLocalStorage from 'react-secure-storage';
+
+export default function SignIn() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const router = useRouter();
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setError("");
+    const handleLogin = async (e : FormEvent ) => {
+        e.preventDefault(); // 기본폼 제출방지.
+        setError(""); //기존 에러메세지 삭제.
+        let globalLoginResult : {
+            nickname: string;
+        } = {
+            nickname: ""
+        };
 
         try {
             const res = await fetch("http://localhost:8070/api/auth/login", { // 스프링 부트 백엔드 URL
@@ -20,14 +26,29 @@ export default function signIn() {
                 body: JSON.stringify({ username, password }),
                 credentials: "include", // 쿠키 자동 포함
             });
-
+            globalLoginResult = await res.json();
+            console.log(globalLoginResult);
             if (!res.ok) throw new Error("로그인 실패. 이메일 또는 비밀번호를 확인하세요.");
 
             // onLoginSuccess(); // 로그인 성공 시 부모 컴포넌트에서 처리
             await router.push("/");
-        } catch (e) {
-            setError(e.message);
+        } catch (e : unknown) {
+            if (e instanceof Error) {
+                setError(e.message); // ✅ `e`가 Error 객체인 경우
+            } else {
+                setError("알 수 없는 오류가 발생했습니다."); // ❌ 예상치 못한 타입 처리
+            }
         }
+        // 데이터 저장
+        if(globalLoginResult.nickname){
+            secureLocalStorage.setItem('userInfo', { nickname: globalLoginResult.nickname});
+        }
+
+        // 데이터 삭제
+        //secureLocalStorage.removeItem('userInfo'); // 로그아웃에서 사용 예정
+
+
+
     };
 
     return (
@@ -36,7 +57,7 @@ export default function signIn() {
     {error && <p className="text-red-500">{error}</p>}
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
     <input
-        type="username"
+        type="text"
         placeholder="아이디"
         value={username}
         onChange={(e) => setUsername(e.target.value)}

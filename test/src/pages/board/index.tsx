@@ -25,7 +25,7 @@ console.log("posts : ", posts);
     return (
         <div className="text-center">
             <h1>게시판 목록</h1>
-            <Link href="/board/new" className="bg-blue-500 text-white p-2 rounded">
+            <Link href="/board/New" className="bg-blue-500 text-white p-2 rounded">
                 새 글 작성
             </Link>
             <table className="mx-auto w-1/2">

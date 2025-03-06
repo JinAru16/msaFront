@@ -26,11 +26,14 @@ export default function FreeView() {
 
     return (
         <div>
-            <h1>{post.title}</h1>
-            <h1>{post.content}</h1>
-            <h1>{post.username}</h1>
-            <h1>{post.updateTime}</h1>
-
+            <div className="max-w-1/2 mx-auto p-6 border rounded-lg shadow-md">
+                <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
+                <p className="text-gray-600 mb-2">작성자: {post.username} | 작성일: {post.updateTime}</p>
+                <hr className="my-4" />
+                <div className="text-lg  h-180 overflow-y-auto p-2  rounded-md">
+                    {post.content}
+                </div>
+            </div>
         </div>
     );
 }

@@ -3,7 +3,7 @@ import {FormEvent, useState} from "react";
 import { useRouter } from "next/router"
 import secureLocalStorage from 'react-secure-storage';
 
-export default function SignIn() {
+export default function Signin() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -13,11 +13,9 @@ export default function SignIn() {
     const handleLogin = async (e : FormEvent ) => {
         e.preventDefault(); // 기본폼 제출방지.
         setError(""); //기존 에러메세지 삭제.
-        let globalLoginResult : {
-            nickname: string;
-        } = {
-            nickname: ""
-        };
+
+        const user  = secureLocalStorage.getItem('userInfo');
+        // 데이터 저장
 
         try {
             const res = await fetch("http://localhost:8070/api/auth/login", { // 스프링 부트 백엔드 URL
@@ -26,9 +24,11 @@ export default function SignIn() {
                 body: JSON.stringify({ username, password }),
                 credentials: "include", // 쿠키 자동 포함
             });
-            globalLoginResult = await res.json();
-            console.log(globalLoginResult);
             if (!res.ok) throw new Error("로그인 실패. 이메일 또는 비밀번호를 확인하세요.");
+
+            if(!user){
+                secureLocalStorage.setItem('userInfo', { nickname: res.json().nickname});
+            }
 
             // onLoginSuccess(); // 로그인 성공 시 부모 컴포넌트에서 처리
             await router.push("/");
@@ -39,16 +39,9 @@ export default function SignIn() {
                 setError("알 수 없는 오류가 발생했습니다."); // ❌ 예상치 못한 타입 처리
             }
         }
-        // 데이터 저장
-        if(globalLoginResult.nickname){
-            secureLocalStorage.setItem('userInfo', { nickname: globalLoginResult.nickname});
-        }
 
         // 데이터 삭제
         //secureLocalStorage.removeItem('userInfo'); // 로그아웃에서 사용 예정
-
-
-
     };
 
     return (

@@ -2,6 +2,8 @@
 import {FormEvent, useState} from "react";
 import { useRouter } from "next/router"
 import secureLocalStorage from 'react-secure-storage';
+import {useAuth} from "@/pages/auth/AuthContext";
+
 
 export default function Signin() {
 
@@ -9,6 +11,7 @@ export default function Signin() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const router = useRouter();
+    const { setUser } = useAuth();
 
     const handleLogin = async (e : FormEvent ) => {
         e.preventDefault(); // 기본폼 제출방지.
@@ -25,9 +28,11 @@ export default function Signin() {
                 credentials: "include", // 쿠키 자동 포함
             });
             if (!res.ok) throw new Error("로그인 실패. 이메일 또는 비밀번호를 확인하세요.");
-
-            if(!user){
-                secureLocalStorage.setItem('userInfo', { nickname: res.json().nickname});
+            const data = await res.json();
+            console.log("data : ", data);
+            if(data.nickname){
+                secureLocalStorage.setItem('userInfo', { nickname: data.nickname});
+                setUser(data.nickname);
             }
 
             // onLoginSuccess(); // 로그인 성공 시 부모 컴포넌트에서 처리

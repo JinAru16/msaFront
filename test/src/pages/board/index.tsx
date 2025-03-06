@@ -12,8 +12,6 @@ export default function BoardList() {
 
     const [posts, setPosts] = useState<Post[]>([]);
     useEffect(() => {
-
-
         fetch(`http://localhost:8090/api/community`, {
             method:"GET",
             credentials:"include"
@@ -21,7 +19,8 @@ export default function BoardList() {
             .then((res) => res.json())
             .then((data) => setPosts(data));
     }, []);
-console.log("posts : ", posts);
+
+    console.log('posts', posts);
     return (
         <div className="text-center">
             <h1>게시판 목록</h1>

@@ -1,8 +1,10 @@
 import { FiMenu, FiX } from "react-icons/fi";
 import Link from "next/link";
+import {useAuth} from "@/pages/auth/AuthContext";
 
 // @ts-ignore
 export default function Sidebar({ isOpen, setIsOpen }) {
+    const { user } = useAuth();
     return (
         <>
             {/* 메뉴 버튼 (항상 보이도록 설정) */}
@@ -22,7 +24,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                         <h2 className="text-xl font-bold mt-5 ml-15">메뉴</h2>
                         <ul className="mt-4 space-y-2">
                             <li><Link href="/" className="block p-2 hover:bg-gray-700">🏠 홈</Link></li>
-                            <li><Link href="/auth/Signin" className="block p-2 hover:bg-gray-700">🔐 로그인</Link></li>
+                            {user? <li><Link href="/MyPage" className="block p-2 hover:bg-gray-700">🪪 마이페이지</Link></li>
+                            : <li><Link href="/auth/Signin" className="block p-2 hover:bg-gray-700">🔐 로그인</Link></li> }
                             <li><Link href="/menu/About" className="block p-2 hover:bg-gray-700">ℹ️ 소개</Link></li>
                             <li><Link href="/board" className="block p-2 hover:bg-gray-700">📋 자유게시판</Link></li>
                         </ul>

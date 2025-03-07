@@ -29,7 +29,6 @@ export default function Signin() {
             });
             if (!res.ok) throw new Error("로그인 실패. 이메일 또는 비밀번호를 확인하세요.");
             const data = await res.json();
-            console.log("data : ", data);
             if(data.nickname){
                 secureLocalStorage.setItem('userInfo', { nickname: data.nickname});
                 setUser(data.nickname);
@@ -45,8 +44,6 @@ export default function Signin() {
             }
         }
 
-        // 데이터 삭제
-        //secureLocalStorage.removeItem('userInfo'); // 로그아웃에서 사용 예정
     };
 
     return (
